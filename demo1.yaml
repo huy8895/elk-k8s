@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-service1
+spec:
+  selector:
+    matchLabels:
+      app: demo-service1
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: demo-service1
+    spec:
+      containers:
+        - name: demo-service1
+          image: huy8895/demo-cicd-github
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_APPLICATION_NAME
+              value: k8s-sidecar-demo-
+            - name: LOGGING_FILE_NAME
+              value: /app/logs/app.log
+
+          volumeMounts:
+            - name: app-logs
+              mountPath: /app/logs
+        - name: filebeat-sidecar
+          image: docker.elastic.co/beats/filebeat:8.11.3
+          volumeMounts:
+            - name: app-logs
+              mountPath: /app/logs
+            - name: filebeat-config
+              mountPath: /usr/share/filebeat/filebeat.yml
+              subPath: filebeat.yml
+      volumes:
+        - name: app-logs
+        - name: filebeat-config
+          configMap:
+            name: filebeat-configmap
+            items:
+              - key: filebeat.yml
+                path: filebeat.yml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-service1
+spec:
+  type: ClusterIP
+  selector:
+    app: demo-service1
+  ports:
+    - protocol: "TCP"
+      port: 8080
+      targetPort: 8080

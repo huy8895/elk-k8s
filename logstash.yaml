@@ -12,23 +12,14 @@ data:
         port => 5044
       }
     }
-    
+
     output {
       elasticsearch {
-        hosts => ["http://esservice:9200"]
+        hosts => ["http://192.168.56.131:9200","http://192.168.56.132:9200","http://192.168.56.133:9200"]
         user => "elastic"
-        password => "demo@123"  
+        password => "121212"
       }
     }
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: logstash-access
-  namespace: default
-type: Opaque
-data:
-  ELASTICSEARCH_URL: ZWxhc3RpY3NlYXJjaC1tYXN0ZXI=
 ---
 apiVersion: apps/v1
 kind: Deployment

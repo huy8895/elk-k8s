@@ -30,3 +30,16 @@ kubectl port-forward service/kb-svc 5601
 kubectl port-forward service/demo-service 8895:8080
 kubectl port-forward service/esservice 9200
 ```
+
+Tạo mới user kibana_user
+```shell
+curl --location 'http://localhost:9200/_security/user/kibana_user' \
+--header 'Content-Type: application/json' \
+--user elastic:demo@123
+--data-raw '{
+    "password": "demo@123",
+    "roles": [
+        "kibana_system"
+    ]
+}'
+```

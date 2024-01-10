@@ -43,3 +43,28 @@ curl --location 'http://localhost:9200/_security/user/kibana_user' \
     ]
 }'
 ```
+
+nếu sử dụng elastic search cluster thì config: 
+```yml
+...
+        env:
+          - name: ELASTICSEARCH_HOSTS
+            value: '["http://192.168.56.131:9200","http://192.168.56.133:9200","http://192.168.56.133:9200"]'
+          - name: ELASTICSEARCH_USERNAME
+            value: "kibana_system"
+          - name: ELASTICSEARCH_PASSWORD
+            value: "kibana@123"
+        ports:
+        - containerPort: 5601
+```
+
+file logstash config: 
+```yml
+    output {
+      elasticsearch {
+        hosts => ["http://192.168.56.131:9200","http://192.168.56.132:9200","http://192.168.56.133:9200"]
+        user => "elastic"
+        password => "121212"
+      }
+    }
+```

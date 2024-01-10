@@ -20,7 +20,7 @@ spec:
         imagePullPolicy: Always
         env:
           - name: ELASTICSEARCH_HOSTS
-            value: '["http://192.168.56.131:9200","http://192.168.56.133:9200","http://192.168.56.133:9200"]'
+            value: '["esservice:9200"]'
           - name: ELASTICSEARCH_USERNAME
             value: "kibana_system"
           - name: ELASTICSEARCH_PASSWORD

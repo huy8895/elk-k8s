@@ -15,9 +15,10 @@ data:
 
     output {
       elasticsearch {
-        hosts => ["http://192.168.56.131:9200","http://192.168.56.132:9200","http://192.168.56.133:9200"]
+        hosts => ["esservice:9200"]
         user => "elastic"
-        password => "121212"
+        password => "demo@123"
+        index => "%{[@metadata][beat]}-%{[@metadata][version]}"
       }
     }
 ---

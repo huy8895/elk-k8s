@@ -6,7 +6,7 @@ kubectl apply -f elasticsearch.yaml
 ```
 - exec 
 ```shell
-DEMO_SERVICE=demo-service-687f86f665-l8tvk 
+DEMO_SERVICE=demo-service-85bf9879d6-5mm6f
 kubectl logs -f $DEMO_SERVICE -c filebeat-sidecar
 kubectl exec --stdin --tty $DEMO_SERVICE   -- /bin/bash
 kubectl logs -f $DEMO_SERVICE
@@ -67,4 +67,16 @@ file logstash config:
         password => "121212"
       }
     }
+```
+
+khi chạy file 
+```shell
+kubectl apply -f demo-hostpath.yaml
+```
+
+thì logs sẽ được mount từ pod vào máy node. 
+nếu chạy bằng minikube thì log sẽ cần exec vào trong minikube bằng lệnh: 
+```shell
+minikube ssh 
+cd /var/log/demo-hostpath
 ```

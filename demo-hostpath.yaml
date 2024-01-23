@@ -59,7 +59,7 @@ spec:
       volumes:
         - name: app-logs
           hostPath:
-            path: /var/log/app
+            path: /var/log/demo-hostpath
             type: DirectoryOrCreate
         - name: filebeat-config
           configMap:

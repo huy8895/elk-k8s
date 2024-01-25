@@ -69,6 +69,30 @@ file logstash config:
     }
 ```
 
+filebeat config map:
+```yml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebeat-configmap
+data:
+  filebeat.yml: |
+    filebeat:
+      config:
+        modules:
+          path: /usr/share/filebeat/modules.d/*.yml
+          reload:
+            enabled: true
+      inputs:
+        - type: log
+          enabled: true
+          paths:
+            - /app/logs/*.log
+    output.logstash:
+      hosts: [ "192.168.56.132:5044" ]
+```
+
+- mount volume log 
 khi chạy file 
 ```shell
 kubectl apply -f demo-hostpath.yaml

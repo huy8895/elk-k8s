@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-service
+spec:
+  selector:
+    matchLabels:
+      app: demo-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: demo-service
+    spec:
+      containers:
+        - name: demo-service
+          image: huy8895/demo-cicd-github
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_APPLICATION_NAME
+              value: k8s-sidecar-demo
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: LOGGING_FILE_NAME
+              value: "/app/logs/$(POD_NAME).log"
+          volumeMounts:
+            - name: app-logs
+              mountPath: /app/logs
+      volumes:
+        - name: app-logs
+          hostPath:
+            path: /var/log/demo-hostpath
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-service
+spec:
+  type: ClusterIP
+  selector:
+    app: demo-service
+  ports:
+    - protocol: "TCP"
+      port: 8080
+      targetPort: 8080
